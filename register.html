@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Team Registration Form</title>
+    
+    <!-- ✅ Latest EmailJS SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+
+    <style>
+        /* General Styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #1e1e2f;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        /* Form Container */
+        .container {
+            background-color: #29293d;
+            padding: 20px;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 400px;
+            margin-top:150px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Form Title */
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        /* Form Elements */
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+
+        input, select, button {
+            padding: 12px;
+            margin-bottom: 15px;
+            background-color: #353547;
+            color: #fff;
+            border: 1px solid #4a4a5a;
+            border-radius: 5px;
+            font-size: 14px;
+            outline: none;
+            transition: border 0.3s;
+        }
+
+        input:focus, select:focus {
+            border-color: #4CAF50;
+        }
+
+        /* Submit Button */
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 480px) {
+            .container {
+                width: 80%;
+                padding:20;
+                margin-top:200px;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Team Registration Form</h1>
+    <form id="registration-form">
+        <!-- Team Name -->
+        <label for="teamName">Team Name:</label>
+        <input type="text" id="teamName" name="teamName" required />
+
+        <!-- Player Names -->
+        <label for="player1">In-Game Name (Player 1):</label>
+        <input type="text" id="player1" name="player1" required />
+
+        <label for="player2">In-Game Name (Player 2):</label>
+        <input type="text" id="player2" name="player2" required />
+
+        <label for="player3">In-Game Name (Player 3):</label>
+        <input type="text" id="player3" name="player3" required />
+
+        <label for="player4">In-Game Name (Player 4):</label>
+        <input type="text" id="player4" name="player4" required />
+
+        <!-- Contact Preference -->
+        <label for="contact">Preferred Contact Method:</label>
+        <select id="contact" name="contact" onchange="updateContactPlaceholder()" required>
+            <option value="phone" selected>Phone</option>
+            <option value="email">Email</option>
+            <option value="discord">Discord</option>
+        </select>
+
+        <!-- Contact Details -->
+        <input type="text" id="contactDetail" name="contactDetail" placeholder="Enter your phone number" required />
+
+        <!-- Submit Button -->
+        <button type="submit" id="submitButton">Submit</button>
+    </form>
+</div>
+
+<!-- ✅ Latest EmailJS Script -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // ✅ Initialize EmailJS with the correct public key
+        emailjs.init("hT5x2ZVQOpgwzocEr");
+
+        document.getElementById("registration-form").addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            const formData = {
+                teamName: document.getElementById("teamName").value,
+                player1: document.getElementById("player1").value,
+                player2: document.getElementById("player2").value,
+                player3: document.getElementById("player3").value,
+                player4: document.getElementById("player4").value,
+                contactMethod: document.getElementById("contact").value,
+                contactDetail: document.getElementById("contactDetail").value
+            };
+
+            console.log("Sending data:", formData); // Debugging
+
+            // ✅ Use the correct service ID and template ID
+            emailjs.send("service_95mkquf", "template_4taw2kk", formData)
+                .then(response => {
+                    console.log("SUCCESS!", response);
+                    alert("Registration Successful!");
+                    document.getElementById("registration-form").reset();
+                })
+                .catch(error => {
+                    console.error("FAILED...", error);
+                    alert(`Error: ${error.text}`);
+                });
+        });
+
+        // ✅ Update contact placeholder based on contact method
+        window.updateContactPlaceholder = function() {
+            const contactMethod = document.getElementById("contact").value;
+            const contactDetail = document.getElementById("contactDetail");
+
+            if (contactMethod === 'phone') {
+                contactDetail.placeholder = 'Enter your phone number';
+            } else if (contactMethod === 'email') {
+                contactDetail.placeholder = 'Enter your email address';
+            } else if (contactMethod === 'discord') {
+                contactDetail.placeholder = 'Enter your Discord ID';
+            }
+        };
+    });
+</script>
+
+</body>
+</html>
